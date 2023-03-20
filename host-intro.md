@@ -68,3 +68,78 @@ L2CAP监视协议资源,保证QoS可信.
 1. L2CAP不提供同步数据(特定的SCO和eSCO逻辑传输).
 2. L2CAP不支持可靠广播channel.
 ```
+# 1.4 TERMINOLOGY 
+
+```
+1. Upper Layer
+    与L2CAP用SDUs交换数据,通常为应用或更高层协议(Service Level Protocol),与L2CAP具体接口未指定.
+
+2. Lower Layer
+    与L2CAP用PDUs或者PDU片段交互,通常存在与controller中,但HCI驱动也可以视同.除了HCI功能以外,具体接口都未指定.
+
+3. L2CAP channel
+    对等设备两个端点之间的逻辑连接,用CID(Channel Identifiers)描述,可复用在一个controller逻辑连接上.
+
+4. SDU
+    L2CAP与上层交换,并通过channel传输的数据,仅与上层发起数据有关,不包括L2CAP的协议信息.
+
+5. Segment, or SDU segment
+    SDU片段,一个SDU可能分为一个或多个片段.仅在强化重传模式,streaming模式,重传模式,流控模式.在基本的L2CAP模式中无效.
+
+6. Segmentation
+    片段化,产生5的过程.
+
+7. Reassembly
+    6的逆过程,片段重组.
+
+8. PDU
+    数据包,包含L2CAP协议信息字段,以及上层信息数据.总是以基本L2CAP header开始,类型有B-frames,还有I/S/C/G/K-frames.
+
+9. Basic L2CAP header
+    包含最小的L2CAP协议信息:PDU长度,CID.
+
+10. B-frame
+    Basic information frame, 包含一个完整的SDU作为payload,用一个basic L2CAP header封包.
+
+11. I-frame
+    Information frame, 包括SDU片段,附加的协议信息,用一个basic L2CAP header封包.用于加强重传模式,streaming模式,重传模式,流控模式.
+
+12. S-frame
+    Supervisory frame, 仅包含协议信息,用一个basic L2CAP header封包,不包含SDU数据.用于强化重传模式,重传模式,流控模式.
+
+13. C-frame
+    Control frame, 用于L2CAP实体之间交换信号消息,仅用于信号channel.
+
+14. G-frame
+    Group frame, 仅用于L2CAP无连接channel,包含PSM,后跟完整的SDU,用basic L2CAP header封包,用于广播激活外设,或发送单播数据到单一远程设备.
+
+15. K-frame
+    Credit-based frame, 用于LE Credit Based流控模式,包含SDU片段和附加协议信息,用basic L2CAP header封.
+
+16. Fragment
+    PDU的一部分,仅用于与下层交换数据,不用于P2P传输.根据PDU可以为start或continuation,不包含PDU以外的协议信息,在下层中区分传输?//note--
+
+17. Fragmentation
+    碎片化,用于HCI驱动或controller,把PDU碎片化以放进HCI-ACL数据包或controller数据包中.可用于所有的L2CAP模式.
+
+18. Recombination
+    逆碎片化,重新建立PDU,其在协议栈的位置,不一定与发送方的碎片化相同.
+
+19. MTU
+    Maximum Transmission Unit, SDU最大尺寸,上层实体有能力处理.
+
+20. Payload Size
+    PDU中的SDU数据量
+
+21. MPS
+    Maximum PDU payload Size, 在基本L2CAP模式中,会与MTU值相同.
+
+22. MTUsig
+    Signaling MTU, C-frame中除去header外的大小,当C-frame太大而被peer拒收时,会被发现.
+
+23. MTUcnl
+    Connectionless MTU, 连接包信息的最大尺寸,G-frame中除去header和PSM以外的最大尺寸,可以发L2CAP_INFORMATION_REQ包来发现. 
+
+24. MaxTransmit
+    在强化重传模式和重传模式中,PDU丢包的重传次数,0表示无限次,1表示禁止重传;设置为1时,重传PDU失败会导致连接断开,作为比较,在流控模式中则不会导致连接断开.
+```
