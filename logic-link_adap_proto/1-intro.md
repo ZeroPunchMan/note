@@ -1,5 +1,5 @@
 # 1.1 L2CAP features
-有图
+有图 l2cap.png
 
 ## Protocol/channel multiplexing
 ```
