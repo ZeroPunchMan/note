@@ -157,4 +157,45 @@ SAR为0b01时,在payload前,指定SDU总大小,且不应该大于对等设备的
 ```
 
 ### Frame Check Sequence (2 octets) 
-page 1035
+重传和流控模式是强制要求的,强化重传和streaming模式是可能存在.
+
+算法有图 fcs.png,例子如下:
+```
+1. I Frame
+PDU Length = 14
+Channel ID = 0x0040
+Control = 0x0002 (SAR=0b00, ReqSeq=0b000000, R=0, TxSeq=0b000001)
+Information Payload = 00 01 02 03 04 05 06 07 08 09 (10 octets, hexadecimal notation)
+==> FCS = 0x6138
+==> Data to Send = 0E 00 40 00 02 00 00 01 02 03 04 05 06 07 08 09 38 61
+(hexadecimal notation)
+
+
+2. RR Frame
+PDU Length = 4
+Channel ID = 0x0040
+Control = 0x0101 (ReqSeq=0b000001, R=0, S=0b00)
+==> FCS = 0x14D4
+==> Data to Send = 04 00 40 00 01 01 D4 14 (hexadecimal notation)
+```
+
+### Invalid Frame Detection
+```
+一些情况的包可以丢掉,如CID不对,SAR顺序不对,FCS错误,包字节数过少,PDU的payload长度超过MPS,等等
+```
+
+## 3.4 CONNECTION-ORIENTED CHANNELS IN LE CREDIT BASED FLOW CONTROL MODE AND ENHANCED CREDIT BASED FLOW CONTROL MODE
+面向连接的通道,LE Credit流控模式和强化Credit流控模式.
+
+K-frame
+| PDU Length |  CID   | SDU length  | infomation payload |
+| :--------: | :----: | :---------: | :----------------: |
+|  16 bits   | 0x0002 | 0 or16 bits |        var         |
+
+```
+第一个K-frame存在SDU长度,后续的帧全是payload,以下情况接收方会直接断开通道:
+1. SDU长度超过接收方的MTU
+2. payload超过MPS
+3. 总的payload超过了指定的SDU长度
+```
+
