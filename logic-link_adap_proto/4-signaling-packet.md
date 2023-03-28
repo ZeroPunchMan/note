@@ -75,7 +75,7 @@
 ## 4.2 L2CAP_CONNECTION_REQ (CODE 0x02)
 用来在两个设备间创建L2CAP通道,通道要在配置开始之前确立.
 
-| Code=0x01 | Identifier | Data Length |        PSM         | Source CID |
+| Code=0x02 | Identifier | Data Length |        PSM         | Source CID |
 | :-------: | :--------: | :---------: | :----------------: | :--------: |
 |   0x02    |  octet 1   |  octet 2~3  | 2 octets (minimum) |  2 octets  |
 
@@ -98,3 +98,66 @@ PSM分段:
 ```
 
 ## 4.3 L2CAP_CONNECTION_RSP (CODE 0x03)
+| Code=0x03 | Identifier | Data Length | Destination CID | Source CID |  Result  |  Status  |
+| :-------: | :--------: | :---------: | :-------------: | :--------: | :------: | :------: |
+|   0x02    |  octet 1   |  octet 2~3  |    2 octets     |  2 octets  | 2 octets | 2 octets |
+
+```
+Destination CID: 发送此响应的端点CID
+Source CID: 之前发4.2请求的ID
+Result: 0x00表示成功,收到此成功结果时,一个通道就建立了.如果非0,则DCID和SCID无效.
+Status: Result为Pending时有效.
+```
+
+### Result
+| Value  |                    Description                    |
+| :----: | :-----------------------------------------------: |
+| 0x0000 |              Connection successful.               |
+| 0x0001 |                Connection pending                 |
+| 0x0002 |      Connection refused – PSM not supported.      |
+| 0x0003 |       Connection refused – security block.        |
+| 0x0004 |   Connection refused – no resources available.    |
+| 0x0006 |      Connection refused – invalid Source CID      |
+| 0x0007 | Connection refused – Source CID already allocated |
+| Other  |             Reserved for future use.              |
+
+### Status
+Result为Pending时
+| Value  |           Description            |
+| :----: | :------------------------------: |
+| 0x0000 | No further information available |
+| 0x0001 |      Authentication pending      |
+| 0x0002 |      Authorization pending       |
+| Other  |     Reserved for future use      |
+
+## 4.4 L2CAP_CONFIGURATION_REQ (CODE 0x04)
+```
+用来初始化逻辑连接传输合约,包含一些需要设置的参数,如果没包含,则为默认值或之前设置的值.
+如果没有任何参数需要设置,则C flag要设置为0.
+即使全部都用默认值,也应该发无配置参数的包.
+```
+| Code=0x04 | Identifier | Data Length | Destination CID |  Flags   | Configuration Options |
+| :-------: | :--------: | :---------: | :-------------: | :------: | :-------------------: |
+|   0x02    |  octet 1   |  octet 2~3  |    2 octets     | 2 octets |          var          |
+
+```
+Destination CID: 接收此请求的端点.
+```
+
+### Flags 
+         
+|  RFU  |   C   |
+| :---: | :---: |
+|  MSB  |  LSB  |
+```
+1. C表示有多个包要继续发.
+2. 如果两个L2CAP实体都支持扩展流控指定配置,则C一直为0.
+3. 尽量一个包把参数配置完,但要考虑MTUsig可能需要多包配置,不要把一个option拆开放到两包中.
+4. 每个req要不同id,并且有同id的rsp.
+5. rsp包含req的options(除非出错,更适合回复REJECT_RSP),或者一个"Success"并不包含option.
+6. options要延迟到req包全部收到,此时表示req事件发生.
+7. rsp的C flag应该与req相同,如果req发了C=0的包,而rsp回复了1,则表示rsp端有options要发给req端,
+    此时req一直发null option包给rsp方,直到rsp方发C=0的包.此时表示rsp事件发生.
+8. 所有options都应该成功,才表示此业务成功.
+9. 接收方要能处理未知option,空的req可被用来请求一个rsp.
+```
