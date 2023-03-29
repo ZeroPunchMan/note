@@ -100,7 +100,7 @@ PSM分段:
 ## 4.3 L2CAP_CONNECTION_RSP (CODE 0x03)
 | Code=0x03 | Identifier | Data Length | Destination CID | Source CID |  Result  |  Status  |
 | :-------: | :--------: | :---------: | :-------------: | :--------: | :------: | :------: |
-|   0x02    |  octet 1   |  octet 2~3  |    2 octets     |  2 octets  | 2 octets | 2 octets |
+|   0x03    |  octet 1   |  octet 2~3  |    2 octets     |  2 octets  | 2 octets | 2 octets |
 
 ```
 Destination CID: 发送此响应的端点CID
@@ -138,7 +138,7 @@ Result为Pending时
 ```
 | Code=0x04 | Identifier | Data Length | Destination CID |  Flags   | Configuration Options |
 | :-------: | :--------: | :---------: | :-------------: | :------: | :-------------------: |
-|   0x02    |  octet 1   |  octet 2~3  |    2 octets     | 2 octets |          var          |
+|   0x04    |  octet 1   |  octet 2~3  |    2 octets     | 2 octets |          var          |
 
 ```
 Destination CID: 接收此请求的端点.
@@ -161,3 +161,128 @@ Destination CID: 接收此请求的端点.
 8. 所有options都应该成功,才表示此业务成功.
 9. 接收方要能处理未知option,空的req可被用来请求一个rsp.
 ```
+
+## 4.5 L2CAP_CONFIGURATION_RSP (CODE 0x05)
+
+| Code=0x05 | Identifier | Data Length | Source CID |  Flags   |  Result  | Config |
+| :-------: | :--------: | :---------: | :--------: | :------: | :------: | :----: |
+|   0x05    |  octet 1   |  octet 2~3  |  2 octets  | 2 octets | 2 octets |  var   |
+
+
+```
+Source CID:  发req的端点,即接收此rsp的端点.
+Flags: 同req,仅最低位C有用.
+```
+| Result |               Description               |
+| :----: | :-------------------------------------: |
+| 0x0000 |                 Success                 |
+| 0x0001 |    Failure – unacceptable parameters    |
+| 0x0002 | Failure – rejected (no reason provided) |
+| 0x0003 |        Failure – unknown options        |
+| 0x0004 |                 Pending                 |
+| 0x0005 |      Failure - flow spec rejected       |
+| Other  |         Reserved for future use         |
+
+```
+与Result有关.
+0x000与0x0004: 成功或pending,包含配置参数的返回值
+0x0001: 失败
+0x0003: 包含接收方不理解的option, 如果是不理解的req,则视为hints.
+```
+
+## 4.6 L2CAP_DISCONNECTION_REQ (CODE 0x06)
+| Code=0x06 | Identifier | Data Length | Destination CID | Source CID |
+| :-------: | :--------: | :---------: | :-------------: | :--------: |
+|   0x06    |  octet 1   |  octet 2~3  |    2 octets     |  2 octets  |
+
+```
+DCID: 接收此req的端点.错误要回复L2CAP_COMMAND_REJECT_RSP.
+SCID: 发req的端点.仅SCID错误,则不管.
+```
+
+```
+req发出后,发送方不再发其他数据;收到req后,接收方不再发其他数据.
+```
+
+## 4.7 L2CAP_DISCONNECTION_RSP (CODE 0x07)
+| Code=0x07 | Identifier | Data Length | Destination CID | Source CID |
+| :-------: | :--------: | :---------: | :-------------: | :--------: |
+|   0x07    |  octet 1   |  octet 2~3  |    2 octets     |  2 octets  |
+
+## 4.8~4.9 L2CAP_ECHO_REQ (CODE 0x08) and L2CAP_ECHO_RSP (CODE 0x09)
+|   Code    | Identifier | Data Length | Echo Data |
+| :-------: | :--------: | :---------: | :-------: |
+| 0x08/0x09 |  octet 1   |  octet 2~3  | optional  |
+
+```
+用来测试连接
+```
+
+## 4.10 L2CAP_INFORMATION_REQ (CODE 0x0A) 
+用来请求一些信息
+
+| Code  | Identifier | Data Length | Info Type |
+| :---: | :--------: | :---------: | :-------: |
+| 0x0a  |  octet 1   |  octet 2~3  | 2 octets  |
+
+| Value  |         Description         |
+| :----: | :-------------------------: |
+| 0x0001 |     Connectionless MTU      |
+| 0x0002 | Extended features supported |
+| 0x0003 |  Fixed channels supported   |
+| Other  |   Reserved for future use   |
+
+```
+第一次校验前,不要往0x0001发0x0003的InfoType,因为远程设备的扩展特征位没设置?
+```
+
+## 4.11 L2CAP_INFORMATION_RSP (CODE 0x0B) 
+| Code  | Identifier | Data Length | Info Type |  Result  |       Info       |
+| :---: | :--------: | :---------: | :-------: | :------: | :--------------: |
+| 0x0b  |  octet 1   |  octet 2~3  | 2 octets  | 2 octets | 0 or more octets |
+
+| Result |       Description       |
+| :----: | :---------------------: |
+| 0x0000 |         Success         |
+| 0x0001 |      Not supported      |
+| Other  | Reserved for future use |
+
+| InfoType |           Info           | Info length(octets) |
+| :------: | :----------------------: | :-----------------: |
+|  0x0001  |    Connectionless MTU    |          2          |
+|  0x0002  |  Extended feature mask   |          4          |
+|  0x0003  | Fixed channels Supported |          8          |
+
+## 4.12 EXTENDED FEATURE MASK
+见图 extended_feature_mask.png
+
+## 4.13 FIXED CHANNELS SUPPORTED
+见图 fixed_channels.png
+
+```
+除了signaling通道以外,不应该发数据;
+除非用4.11包说明了支持的固定通道,或者收到了远程设备在固定通道发的包.
+不支持的固定通道发来的包,直接丢掉.
+```
+
+## 4.14 ~ 4.19 已废弃
+
+## 4.20 L2CAP_CONNECTION_PARAMETER_UPDATE_REQ(CODE 0x12)
+```
+主要用作外设给中心设备发,并且是双方controller和host都不支持Connection Parameters Request Link Layer Control procedure时.
+外设收到则回一个L2CAP_COMMAND_REJECT_RSP packet with reason 0x0000 (Command not understood).
+中心设备收到认可的参数,则发给controller.
+```
+| Code  | Identifier | Data Length | Interval_Min | Interval_Max | Latency  | Timeout  |
+| :---: | :--------: | :---------: | :----------: | :----------: | :------: | :------: |
+| 0x12  |  octet 1   |  octet 2~3  |   ? octets   |   ? octets   | ? octets | ? octets |
+
+## 4.21 L2CAP_CONNECTION_PARAMETER_UPDATE_RSP(CODE 0x13)
+| Code  | Identifier | Data Length | Result |
+| :---: | :--------: | :---------: | :-------: |
+| 0x13  |  octet 1   |  octet 2~3  | 2 octets  |
+
+```
+Result: 0-成功;1-拒绝;
+```
+
