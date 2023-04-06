@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>279</x>
+      <y>99</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>扫描态
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>279</x>
+      <y>198</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>就绪态
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>279</x>
+      <y>315</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>连接态
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>459</x>
+      <y>198</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>发起态
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>99</x>
+      <y>198</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>广播态
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>189</x>
+      <y>207</y>
+      <w>108</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>369</x>
+      <y>207</y>
+      <w>108</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>369</x>
+      <y>225</y>
+      <w>198</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+主设备</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;120.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>225</y>
+      <w>153</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+从设备</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0;150.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>225</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>126</y>
+      <w>27</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>612</x>
+      <y>81</y>
+      <w>207</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>就绪态
+--
+上电后就进入就绪态.
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>612</x>
+      <y>216</y>
+      <w>207</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>广播态
+--
+1.可发现或可连接设备
+2.仅用来广播数据的设备
+
+停止后进入就绪态,
+或收到发起者的请求-&gt;连接态
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>612</x>
+      <y>414</y>
+      <w>234</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>扫描态
+--
+分为被动和主动,主动设备可发扫描请求.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>612</x>
+      <y>531</y>
+      <w>315</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>连接态
+--
+1.主连接态: 从发起态进入,主设备定期给从设备发报文,
+   从设备只能通过回复来发送数据.
+2.从连接态: 只能从广播态进入.
+
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>234</x>
+      <y>495</y>
+      <w>279</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>多状态机
+--
+可以同时维护多个状态机,扮演不同角色,有限制:
+1.不能同时成为主从设备.
+2.不能同时做两个从设备,因为从设备不能广播.
+  经典蓝牙支持,叫分散式网络(scatternet).
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
