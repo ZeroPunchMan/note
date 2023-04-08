@@ -6,12 +6,14 @@
     <coordinates>
       <x>420</x>
       <y>120</y>
-      <w>180</w>
-      <h>50</h>
+      <w>310</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>调频算法
 --
-f(n+1)=(f(n)+hop)
+f(n+1)=(f(n)+hop) mod 37
+数学:hop不是37的因数,则会一定规律遍历0~37
+
 halign=left
 valign=top</panel_attributes>
     <additional_attributes/>
@@ -33,5 +35,35 @@ valign=top</panel_attributes>
 halign=left
 valign=top</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>90</y>
+      <w>240</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>halign=left
+正整数r,t,s=r+t
+x(n+1)=
+1. x(n)-r | x(n)&gt;r
+2. 0      | x(n)=r
+3. x(n)+t | x(n)&lt;r
+x数列会不重复地取得0~s-1的全部值.
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>720</x>
+      <y>150</y>
+      <w>320</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
   </element>
 </diagram>
