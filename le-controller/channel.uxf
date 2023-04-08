@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>420</x>
+      <y>120</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>调频算法
+--
+f(n+1)=(f(n)+hop)
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>420</x>
+      <y>200</y>
+      <w>240</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>自适应调频
+--
+1.维护一个表,标记好信道和坏信道.
+2.维护一个坏信道-&gt;好信道的映射.
+3.跳到坏信道时,映射到好信道.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
