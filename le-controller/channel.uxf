@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>10</zoom_level>
+  <zoom_level>9</zoom_level>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>420</x>
-      <y>120</y>
-      <w>310</w>
-      <h>70</h>
+      <x>225</x>
+      <y>234</y>
+      <w>279</w>
+      <h>63</h>
     </coordinates>
-    <panel_attributes>调频算法
+    <panel_attributes>跳频算法
 --
 f(n+1)=(f(n)+hop) mod 37
 数学:hop不是37的因数,则会一定规律遍历0~37
@@ -21,16 +21,17 @@ valign=top</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>420</x>
-      <y>200</y>
-      <w>240</w>
-      <h>80</h>
+      <x>306</x>
+      <y>495</y>
+      <w>216</w>
+      <h>90</h>
     </coordinates>
-    <panel_attributes>自适应调频
+    <panel_attributes>自适应跳频
 --
 1.维护一个表,标记好信道和坏信道.
 2.维护一个坏信道-&gt;好信道的映射.
 3.跳到坏信道时,映射到好信道.
+4.只允许主设备改变信道图.
 
 halign=left
 valign=top</panel_attributes>
@@ -39,10 +40,10 @@ valign=top</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1020</x>
-      <y>90</y>
-      <w>240</w>
-      <h>120</h>
+      <x>765</x>
+      <y>207</y>
+      <w>216</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>halign=left
 正整数r,t,s=r+t
@@ -58,12 +59,134 @@ x数列会不重复地取得0~s-1的全部值.
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>720</x>
-      <y>150</y>
-      <w>320</w>
-      <h>30</h>
+      <x>495</x>
+      <y>261</y>
+      <w>288</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;300.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>540</x>
+      <y>459</y>
+      <w>90</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>774</x>
+      <y>459</y>
+      <w>90</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>477</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>477</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>495</y>
+      <w>261</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层信道图请求</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>639</x>
+      <y>414</y>
+      <w>117</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>自适应跳频</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>558</x>
+      <y>567</y>
+      <w>288</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>瞬时:  应用新的信道图
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>585</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>585</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>306</x>
+      <y>621</y>
+      <w>216</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>信道图跳频
+--
+可用信道图,used=[9,10,21...]
+按跳频算法计算f(n+1),
+然后x = f(n+1) mod used.length
+取used[x]为实际信道.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

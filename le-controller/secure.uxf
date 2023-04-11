@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>322</x>
+      <y>0</y>
+      <w>133</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>AES
+--
+ciphertext=E(key,plaintext)
+1.净荷加密
+2.消息完整性校验
+3.数据签名
+4.生成私有地址
+
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>322</x>
+      <y>98</y>
+      <w>266</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>净荷加密
+--
+nonce=pack count || direciton || IV
+
+pack count: 39位包计数,从0开始递增
+direciton: 1位方向?
+IV: 初始化向量,,64位,对端设备分别提供32位
+
+Cmic=E(key, 0x01 || nonce || 0x0000)
+Cb1=E(key, 0x01 || nonce || 0x0001)
+Cb2=E(key, 0x01 || nonce || 0x0002)
+encrypted=(Cb1 ^ block1) || (Cb2 ^ block2) || (Cmic ^ mic)
+
+block1: 前16字节
+block2: 后11字节
+MIC: 完整性校验
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>609</x>
+      <y>98</y>
+      <w>182</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>完整性校验MIC
+--
+B0=0x49 || nonce || length
+B1=0x0001 || header | 0x000000...
+B2:前16字节; B3:后11字节
+header只包括为LLID,其他位置0.
+
+X0=E(key, B0)
+X1=E(key, X0 ^ B1)
+X2=E(key, X1 ^ B2)
+MIC=E(key, X2 ^ B3)
+
+MIC只会用到最高32位
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>322</x>
+      <y>413</y>
+      <w>196</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>启动加密
+--
+1.需要nonce和SK(session key)
+   SK可以用LTK和SKD(密钥分散器)计算得到.
+   SK=E(LTK, SKDmater || SKDslave)
+   IV=IVmaster || IVslave
+2.如果从设备没有LTK,会拒绝加密;
+   如果由LTK,则会三次握手加密
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>595</x>
+      <y>350</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>798</x>
+      <y>350</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>364</y>
+      <w>21</w>
+      <h>357</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;490.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>833</x>
+      <y>364</y>
+      <w>21</w>
+      <h>364</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;500.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>392</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_ENC_REQ(SKDm,IVm)</panel_attributes>
+    <additional_attributes>310.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>546</x>
+      <y>378</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>LTK from host
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>420</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_ENC_RSP(SKDs,IVs)</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>847</x>
+      <y>462</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>计算SK和IV
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>497</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_START_ENC_REQ</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>574</x>
+      <y>539</y>
+      <w>49</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>加密</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>532</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_START_RSP</panel_attributes>
+    <additional_attributes>310.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>567</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_START_RSP</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>847</x>
+      <y>504</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>未加密
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>847</x>
+      <y>427</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>LTK from host
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>546</x>
+      <y>427</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>计算SK和IV
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>847</x>
+      <y>574</y>
+      <w>49</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>加密</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>308</x>
+      <y>882</y>
+      <w>189</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>重启加密
+--
+先3此握手暂停加密,然后走启动加密流程
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>588</x>
+      <y>763</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>791</x>
+      <y>763</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>777</y>
+      <w>21</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>826</x>
+      <y>777</y>
+      <w>21</w>
+      <h>273</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;370.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>805</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_PAUSE_ENC_REQ</panel_attributes>
+    <additional_attributes>310.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>574</x>
+      <y>805</y>
+      <w>42</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>加密
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>840</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+LL_PAUSE_ENC_RSP</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>875</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+LL_PAUSE_ENC_RSP</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>700</x>
+      <y>1001</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>启动加密
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>840</x>
+      <y>840</y>
+      <w>42</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>加密?
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>539</x>
+      <y>875</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>未加密</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>721</x>
+      <y>896</y>
+      <w>21</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>588</x>
+      <y>1085</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>791</x>
+      <y>1085</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>1099</y>
+      <w>21</w>
+      <h>189</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>826</x>
+      <y>1099</y>
+      <w>21</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>1127</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+链路层功能请求</panel_attributes>
+    <additional_attributes>310.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>1162</y>
+      <w>231</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+响应</panel_attributes>
+    <additional_attributes>10.0;20.0;310.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>308</x>
+      <y>1092</y>
+      <w>210</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>功能交换
+--
+每个连接最多一次,第一版BLE只有加密功能位.
+
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

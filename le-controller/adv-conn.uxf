@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>12</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>144</x>
+      <y>0</y>
+      <w>420</w>
+      <h>312</h>
+    </coordinates>
+    <panel_attributes>广播类型
+--
+1.通用广播
+  收到连接请求后,以从设备进入连接;
+  没有连接时都可以发此广播,不分主从.
+2.定向广播
+  用来快速建立连接,包含广播者地址和发起者地址;
+  发起者收到后,可以理解发连接请求.
+  每3.75ms重复一次,不可持续1.28s以上,防污染频段.
+3.不可连接广播
+  beacon等应用,不可被连接和扫描.
+4.可发现广播
+  类似3,但是可扫描
+
+综上,定向广播不可传数据,其他都可以.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>684</x>
+      <y>132</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>发起者
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>996</x>
+      <y>132</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>广播者
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1044</x>
+      <y>156</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>156</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>684</x>
+      <y>276</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>180</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+广播</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>216</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+连接请求</panel_attributes>
+    <additional_attributes>270.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>996</x>
+      <y>276</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>300</y>
+      <w>36</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1044</x>
+      <y>300</y>
+      <w>36</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>348</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+数据报文</panel_attributes>
+    <additional_attributes>270.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>384</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+数据报文</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>876</x>
+      <y>420</y>
+      <w>36</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1140</x>
+      <y>96</y>
+      <w>468</w>
+      <h>396</h>
+    </coordinates>
+    <panel_attributes>连接请求内容
+--
+包含信息:
+1.接入地址: 由主设备提供
+2.CRC初值: 随机数,如果接入地址冲突,则CRC不同.
+3.发送窗口大小
+4.发送窗口偏移: 连接请求后1.25ms强制演示,之后是4和3;
+   窗口偏移是0~连接间隔的人一直,单位1.25ms;
+   从窗口开始,从设备监听数据,如果超时,一个连接间隔后重试.
+5.连接间隔: 单位1.25ms;
+   保持连接和传递数据,从设备通过响应发数据.
+6.从设备延迟: 从设备可以不响应的连接事件次数.
+7.监控超时: 超时则断开,5和6相乘应小于7
+8.自适应跳频图: 标记好坏信道,映射规则为固定偏移?
+9.调频算法增量: hop
+10.休眠时钟精度: 消除连接事件不确定性.
+
+收到连接请求后,即认为连接created,但不是established;
+直到收到数据包确认,才视为正式确立.
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>696</x>
+      <y>696</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>主设备
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1008</x>
+      <y>696</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>从设备
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1056</x>
+      <y>720</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>744</x>
+      <y>720</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>744</x>
+      <y>744</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层更新请求</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>828</x>
+      <y>72</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>连接过程</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>828</x>
+      <y>636</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>连接参数更新</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>720</x>
+      <y>840</y>
+      <w>384</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>瞬时:  应用新的参数
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>744</x>
+      <y>864</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1056</x>
+      <y>864</y>
+      <w>36</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1152</x>
+      <y>816</y>
+      <w>276</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>瞬时参数
+--
+规定某个时刻应用新的连接参数.
+请求之后的第一个连接事件为0,
+应保证至少6个,之后类似连接请求后,
+开始侦听窗口
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>396</x>
+      <y>744</y>
+      <w>276</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>连接更新请求
+--
+LLID为11的链路层控制报文,
+从机必须接受,或断开连接
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>708</x>
+      <y>1608</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>链路层
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1020</x>
+      <y>1608</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>链路层
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1068</x>
+      <y>1632</y>
+      <w>36</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1632</y>
+      <w>36</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1668</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层终止请求</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>840</x>
+      <y>1548</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>终止连接</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1728</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层回复</panel_attributes>
+    <additional_attributes>270.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>348</x>
+      <y>1572</y>
+      <w>348</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>终止连接
+--
+如果回复超时,也会断开,时间与监控超时相同.
+还有监控超时和MIC失效,也会断开.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>708</x>
+      <y>1212</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>链路层
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1020</x>
+      <y>1212</y>
+      <w>120</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>链路层
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1068</x>
+      <y>1236</y>
+      <w>36</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1236</y>
+      <w>36</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1272</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层版本指示</panel_attributes>
+    <additional_attributes>10.0;20.0;270.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>840</x>
+      <y>1152</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>版本交换</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>1332</y>
+      <w>348</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+链路层版本指示</panel_attributes>
+    <additional_attributes>270.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>324</x>
+      <y>1164</y>
+      <w>348</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>版本交换
+--
+每&gt;10连接请求一次,主要用来帮助调试.
+
+halign=left
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
