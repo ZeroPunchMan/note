@@ -106,29 +106,29 @@ Report:
 
 # xbox one s HID服务
 ```
-BT_GATT_PRIMARY_SERVICE(BT_UUID_DECLARE_16(0x1812)),
-BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4a), BT_GATT_CHRC_READ,
+BT_GATT_PRIMARY_SERVICE(BT_UUID_DECLARE_16(0x1812)),  //服务
+BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4a), BT_GATT_CHRC_READ,  //特征HID信息,版本和远程唤醒等
                         BT_GATT_PERM_READ_ENCRYPT, read_info, NULL, &hidInfo),
-BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4b), BT_GATT_CHRC_READ,
+BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4b), BT_GATT_CHRC_READ,  //特征,读取报告描述符
                         BT_GATT_PERM_READ_ENCRYPT, read_report_map, NULL, NULL),
-BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4d),
+BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4d), //特征input报告,通知和主动读取HID报告
                         BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
                         BT_GATT_PERM_READ_ENCRYPT,
                         read_input_report, NULL, NULL),
-BT_GATT_CCC(input_ccc_changed,
+BT_GATT_CCC(input_ccc_changed,   //特征配置,开通知用
             BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT), // todo smp
-BT_GATT_DESCRIPTOR(BT_UUID_DECLARE_16(0x2908), BT_GATT_PERM_READ_ENCRYPT,
+BT_GATT_DESCRIPTOR(BT_UUID_DECLARE_16(0x2908), BT_GATT_PERM_READ_ENCRYPT, //描述符,读input报告meta信息,包含id和类型
                     read_report_meta, NULL, &inputMeta),
-BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4c),
+BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4c), //控制,可挂起和恢复
                         BT_GATT_CHRC_WRITE_WITHOUT_RESP,
                         BT_GATT_PERM_WRITE_ENCRYPT,
                         NULL, write_ctrl_point, &ctrl_point),
 
-BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4d),
+BT_GATT_CHARACTERISTIC(BT_UUID_DECLARE_16(0x2a4d), //特征output报告,读和写入output报告
                         BT_GATT_CHRC_READ | BT_GATT_CHRC_WRITE_WITHOUT_RESP | BT_GATT_CHRC_WRITE,
                         BT_GATT_PERM_READ_ENCRYPT | BT_GATT_PERM_WRITE_ENCRYPT,
                         read_output_report, write_output_report, NULL),
 
-BT_GATT_DESCRIPTOR(BT_UUID_DECLARE_16(0x2908), BT_GATT_PERM_READ_ENCRYPT,
+BT_GATT_DESCRIPTOR(BT_UUID_DECLARE_16(0x2908), BT_GATT_PERM_READ_ENCRYPT, //描述符,读output报告meta信息,包含id和类型
                     read_report_meta, NULL, &outputMeta), 
 ```
